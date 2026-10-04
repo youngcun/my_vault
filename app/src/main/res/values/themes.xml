@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      基础主题。
+
+      为什么必须继承 Theme.AppCompat：
+      androidx.biometric 的 BiometricPrompt 需要 FragmentActivity 宿主，因此
+      MainActivity 继承自 AppCompatActivity；而 AppCompatActivity 在 onCreate 里
+      强制要求主题是 Theme.AppCompat 的后代，否则直接抛
+      "You need to use a Theme.AppCompat theme (or descendant) with this activity"
+      并闪退。这是一个只在真机运行期才会暴露的问题 —— 编译期完全正常。
+
+      Compose 界面自身由 Material 3 的 Kotlin 主题接管配色，这里只负责
+      窗口背景、系统栏与无 ActionBar 的外观。
+    -->
+    <style name="Theme.MyVault" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/vault_background</item>
+        <item name="android:statusBarColor">@color/vault_primary_dark</item>
+        <item name="android:navigationBarColor">@color/vault_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+    </style>
+
+    <!-- 深色模式版本 -->
+    <style name="Theme.MyVault.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/vault_background_dark</item>
+        <item name="android:statusBarColor">@color/vault_background_dark</item>
+        <item name="android:navigationBarColor">@color/vault_background_dark</item>
+    </style>
+
+    <!--
+      自动填充认证 Activity 使用的透明主题。
+
+      注意：不能写 `Theme.AppCompat.Translucent.NoTitleBar` ——
+      appcompat 1.7.0 中并不存在这个父主题（它在很老的版本里曾用过），
+      写成它会直接导致 AAPT 资源链接失败。
+      正确做法是继承一个真实存在的 AppCompat 主题，再自行声明透明相关属性。
+      透明是必要的：认证界面必须让系统指纹弹窗覆盖在调用方 App 之上，
+      而不是把调用方界面顶掉。
+    -->
+    <style name="Theme.MyVault.Transparent" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+    </style>
+</resources>

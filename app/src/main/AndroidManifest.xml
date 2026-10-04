@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ============================================================================
+  MyVault —— 应用清单
+  ============================================================================
+  安全设计声明（可自证）：
+  1. 本清单**不声明任何 INTERNET / ACCESS_NETWORK_STATE / ACCESS_WIFI_STATE 权限**。
+     Android 的沙箱模型下，没有 android.permission.INTERNET 的进程无法创建任何
+     网络套接字（socket 创建会被 SELinux + netd 直接拒绝）。因此本应用在系统层面
+     就不可能产生任何网络流量。
+  2. 没有任何 <provider>、<receiver> 导出给第三方；唯一导出的组件是
+     AutofillService，它由系统（system_server）绑定，且不暴露任何数据接口。
+  3. 不声明 android:usesCleartextTraffic，也不声明任何 backup agent，
+     避免系统云备份把密文库上传到云端。
+  4. allowBackup=false：即使 adb backup 也无法导出应用数据目录。
+  ============================================================================
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      唯一需要的普通权限：指纹/生物识别。它属于 normal 级别，
+      不涉及网络与存储，由系统在安装时自动授予。
+    -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <!-- Android 8/9 上兼容旧的指纹权限（maxSdkVersion 保证新系统不申请） -->
+    <uses-permission
+        android:name="android.permission.USE_FINGERPRINT"
+        android:maxSdkVersion="28" />
+    <!--
+      仅用于「剪贴板自动清除」后的用户提示（Android 13+ 需运行时授权）。
+      拒绝该权限不影响任何核心功能。
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 用于在生物识别时请求系统锁屏校验（可选降级路径） -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 硬件要求：指纹模块为可选，无指纹设备仍可用主密码解锁 -->
+    <uses-feature
+        android:name="android.hardware.fingerprint"
+        android:required="false" />
+
+    <!--
+      显式声明「本应用不使用网络」——任何构建脚本若试图注入网络权限，
+      会因 tools:node="remove" 而失败或产生告警。
+    -->
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+
+    <application
+        android:name=".VaultApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyVault"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="34">
+
+        <!--
+          主界面。
+          安全考虑：exported="false" —— 外部应用无法拉起本应用界面，
+          也就无法通过「能不能启动」来探测设备上是否装了密码库。
+          代价是无法用 `adb shell am start` 直接启动它；调试时请使用
+          `adb shell monkey -p com.myvault.password -c android.intent.category.LAUNCHER 1`
+          或直接从桌面图标进入，不要为了调试把它改成导出。
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:excludeFromRecents="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          自动填充服务：Android 8.0+ 的应用与 Chrome / Firefox 等浏览器
+          填写密码时会调用本服务。这是本应用唯一导出给系统的组件。
+          它通过 AutofillManager 由系统绑定，第三方应用无法直接调用。
+        -->
+        <service
+            android:name=".autofill.VaultAutofillService"
+            android:exported="true"
+            android:label="@string/autofill_service_label"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/autofill_service" />
+        </service>
+
+        <!--
+          自动填充数据集认证 Activity：在填写前要求指纹/主密码解锁。
+          必须 exported=true，因为它会被 AutofillManager 的
+          authentication 流程以 startActivityForResult 方式拉起，
+          但仅接受系统携带的 IntentSender，不接受外部任意调用。
+        -->
+        <activity
+            android:name=".autofill.AutofillAuthActivity"
+            android:exported="true"
+            android:label="@string/autofill_auth_label"
+            android:theme="@style/Theme.MyVault.Transparent"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:launchMode="singleTop" />
+
+        <!--
+          禁用所有非必要的组件暴露：不注册任何 ContentProvider / BroadcastReceiver。
+          FileProvider 仅在需要时由应用内部使用，不声明导出的 provider。
+        -->
+    </application>
+</manifest>

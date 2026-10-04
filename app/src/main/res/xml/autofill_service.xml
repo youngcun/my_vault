@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  自动填充服务声明。
+  settingsActivity 故意留空：本应用不提供独立的「自动填充设置」界面，
+  避免多暴露一个导出组件；配置一律走系统设置。
+-->
+<autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="" />

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      配色刻意保持克制：密码库不是展示型应用，减少视觉噪音有助于用户
+      在「确认这是自己真正要填充的条目」时保持专注。
+    -->
+    <color name="vault_primary">#1F6F5C</color>
+    <color name="vault_primary_dark">#0E4A3C</color>
+    <color name="vault_on_primary">#FFFFFF</color>
+    <color name="vault_secondary">#4A6572</color>
+    <color name="vault_background">#F7F9F8</color>
+    <color name="vault_background_dark">#101614</color>
+    <color name="vault_surface_dark">#18211E</color>
+    <color name="vault_error">#B3261E</color>
+    <color name="vault_success">#2E7D32</color>
+    <color name="vault_warning">#B26A00</color>
+    <color name="transparent">#00000000</color>
+</resources>

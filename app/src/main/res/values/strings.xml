@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 应用标识 -->
+    <string name="app_name">密码库</string>
+    <string name="app_short_name">MyVault</string>
+
+    <!-- ==================== 解锁界面 ==================== -->
+    <string name="unlock_title">解锁密码库</string>
+    <string name="unlock_subtitle">输入主密码。主密码不会离开本机，也不会被上传到任何地方。</string>
+    <string name="unlock_master_password">主密码</string>
+    <string name="unlock_button">解锁</string>
+    <string name="unlock_with_biometric">用指纹解锁</string>
+    <string name="unlock_biometric_title">指纹解锁</string>
+    <string name="unlock_biometric_subtitle">验证指纹后即可打开密码库</string>
+    <string name="unlock_biometric_failed">指纹验证未通过</string>
+    <string name="biometric_needs_reenroll">指纹密钥需要重新绑定：请用主密码解锁，然后在「设置 → 指纹解锁」中关闭再重新开启一次。</string>
+    <string name="biometric_weak_only">本机只有 Class 2（弱）生物识别（多数 2D 人脸属于此类），它无法用于加密绑定密钥，因此不能作为密码库的解锁方式。\n\n建议改用指纹（Class 3）：请在系统设置中录入指纹后重试。</string>
+    <string name="biometric_unavailable_for_crypto">当前设备没有可用于加密绑定的解锁方式。\n\n请在系统设置中录入指纹（或设置锁屏 PIN/密码），然后重试。</string>
+    <string name="biometric_enroll_failed">开启指纹解锁失败：%1$s</string>
+    <string name="settings_biometric_unsupported">本机不可用</string>
+    <string name="unlock_wrong_password">主密码错误</string>
+    <string name="unlock_show_password">显示主密码</string>
+    <string name="unlock_hide_password">隐藏主密码</string>
+    <string name="unlock_working">正在派生密钥（Argon2id）…</string>
+    <string name="unlock_attempts_hint">本机没有存储主密码的任何形式，忘记后只能通过备份文件恢复。</string>
+
+    <!-- ==================== 首次创建 ==================== -->
+    <string name="setup_title">创建你的密码库</string>
+    <string name="setup_subtitle">主密码是唯一钥匙。建议使用一句你记得住、别人猜不到的长口令。</string>
+    <string name="setup_password">设置主密码</string>
+    <string name="setup_password_confirm">再次输入主密码</string>
+    <string name="setup_create">创建密码库</string>
+    <string name="setup_mismatch">两次输入的主密码不一致</string>
+    <string name="setup_too_short">主密码至少需要 8 个字符</string>
+    <string name="setup_strength_very_weak">极弱 —— 几秒内就会被破解</string>
+    <string name="setup_strength_weak">弱 —— 不建议使用</string>
+    <string name="setup_strength_fair">中等 —— 可以接受</string>
+    <string name="setup_strength_strong">强 —— 推荐</string>
+    <string name="setup_strength_excellent">极强 —— 很好</string>
+    <string name="setup_warning_title">请务必记住主密码</string>
+    <string name="setup_warning_body">密码库使用 Argon2id + AES-256-GCM 加密，没有后门、没有找回通道。忘记主密码将永久失去数据，请同时导出一份加密备份。</string>
+    <string name="setup_enable_biometric">同时启用指纹解锁</string>
+
+    <!-- ==================== 条目列表 ==================== -->
+    <string name="list_title">我的密码</string>
+    <string name="list_search_hint">搜索站点或用户名</string>
+    <string name="list_empty">还没有任何条目</string>
+    <string name="list_empty_hint">点击右下角按钮添加第一条凭据</string>
+    <string name="list_no_result">没有匹配的条目</string>
+    <string name="list_add">添加条目</string>
+    <string name="list_favorite">已收藏</string>
+    <string name="list_lock">锁定</string>
+
+    <!-- ==================== 条目详情 / 编辑 ==================== -->
+    <string name="entry_new_title">新建条目</string>
+    <string name="entry_edit_title">编辑条目</string>
+    <string name="entry_site">站点 / 应用名称</string>
+    <string name="entry_username">用户名 / 邮箱</string>
+    <string name="entry_password">密码</string>
+    <string name="entry_url">网址 / 应用包名（用于自动填充）</string>
+    <string name="entry_url_hint">浏览器填网址（如 example.com）；原生 App 建议填包名（在系统「应用信息」里可以看到，形如 com.example.app）。两者都会参与匹配。</string>
+    <string name="entry_notes">备注</string>
+    <string name="entry_notes_hint">例如：密保问题答案、PIN、恢复码。此字段同样加密存储。</string>
+    <string name="entry_save">保存</string>
+    <string name="entry_delete">删除</string>
+    <string name="entry_delete_confirm">确定删除「%1$s」？此操作不可撤销。</string>
+    <string name="entry_cancel">取消</string>
+    <string name="entry_copy_username">复制用户名</string>
+    <string name="entry_copy_password">复制密码</string>
+    <string name="entry_copied">已复制，%1$d 秒后自动清除剪贴板</string>
+    <string name="entry_reveal">显示密码</string>
+    <string name="entry_hide">隐藏密码</string>
+    <string name="entry_generate">生成</string>
+    <string name="entry_site_required">请填写站点名称</string>
+    <string name="entry_password_required">密码不能为空</string>
+    <string name="entry_saved">已保存</string>
+    <string name="entry_deleted">已删除</string>
+    <string name="entry_favorite_toggle">收藏</string>
+    <string name="entry_updated_at">更新于 %1$s</string>
+    <string name="entry_saving">正在保存…</string>
+    <string name="entry_save_failed">保存失败：%1$s</string>
+    <string name="entry_save_unreadable">保存后无法读回该条目。为避免留下损坏数据，已停止操作；请重试或重启应用。</string>
+
+    <!-- 损坏条目提示 -->
+    <string name="broken_entries_title">有 %1$d 条记录无法解密</string>
+    <string name="broken_entries_body">这些记录存在于数据库中，但密文无法通过认证（可能来自旧版本的缺陷或数据损坏）。它们无法恢复，建议清理。</string>
+    <string name="broken_entries_cleanup">清理这些记录</string>
+    <string name="broken_entries_confirm_title">清理无法解密的记录？</string>
+    <string name="broken_entries_confirm_body">将永久删除 %1$d 条无法解密的记录。它们的密文已经无法还原为明文，因此此操作不会丢失任何可用的数据。</string>
+    <string name="broken_entries_cleaned">已清理 %1$d 条无法解密的记录</string>
+
+    <!-- ==================== 密码生成器 ==================== -->
+    <string name="gen_title">密码生成器</string>
+    <string name="gen_mode">类型</string>
+    <string name="gen_mode_random">随机字符</string>
+    <string name="gen_mode_passphrase">易记口令</string>
+    <string name="gen_mode_pin">纯数字</string>
+    <string name="gen_length">长度</string>
+    <string name="gen_word_count">单词数</string>
+    <string name="gen_digits">位数</string>
+    <string name="gen_lowercase">小写字母 a-z</string>
+    <string name="gen_uppercase">大写字母 A-Z</string>
+    <string name="gen_digits_option">数字 0-9</string>
+    <string name="gen_symbols">符号 !@#$…</string>
+    <string name="gen_avoid_ambiguous">排除形近字符（0O1lI）</string>
+    <string name="gen_require_each_class">每类字符至少出现一次</string>
+    <string name="gen_capitalize">单词首字母大写</string>
+    <string name="gen_separator">分隔符</string>
+    <string name="gen_append_digits">单词后加随机数字</string>
+    <string name="gen_wordlist_size">词表规模</string>
+    <string name="gen_wordlist_core">常用 2048 词</string>
+    <string name="gen_wordlist_extended">扩展词表</string>
+    <string name="gen_regenerate">重新生成</string>
+    <string name="gen_use">使用此密码</string>
+    <string name="gen_copy">复制</string>
+    <string name="gen_entropy">熵 ≈ %1$.1f bit</string>
+    <string name="gen_crack_time">GPU 离线爆破约需 %1$s</string>
+    <string name="gen_strength">强度：%1$s</string>
+    <string name="gen_invalid_policy">当前选项无法生成密码：%1$s</string>
+    <!-- 生成器策略不可行的具体原因（由 PasswordGenerator 的 PolicyError 映射而来） -->
+    <string name="gen_error_no_char_class">至少要选择一个字符类型</string>
+
+    <!-- 强度等级（供强度条与生成器共用） -->
+    <string name="strength_very_weak">极弱</string>
+    <string name="strength_weak">弱</string>
+    <string name="strength_fair">中等</string>
+    <string name="strength_strong">强</string>
+    <string name="strength_excellent">极强</string>
+
+    <!-- ==================== 设置 ==================== -->
+    <string name="settings_title">设置</string>
+    <string name="settings_security">安全</string>
+    <string name="settings_change_password">修改主密码</string>
+    <string name="settings_biometric">指纹解锁</string>
+    <string name="settings_biometric_unavailable">本设备不支持指纹识别</string>
+    <string name="settings_biometric_summary_on">已开启</string>
+    <string name="settings_biometric_summary_off">已关闭</string>
+    <string name="settings_biometric_working">正在校验并通过 Argon2id 重新封装密钥…</string>
+    <string name="settings_auto_lock">自动锁定</string>
+    <string name="settings_auto_lock_immediately">立即</string>
+    <string name="settings_auto_lock_30s">30 秒</string>
+    <string name="settings_auto_lock_1m">1 分钟</string>
+    <string name="settings_auto_lock_5m">5 分钟</string>
+    <string name="settings_auto_lock_never">从不（不推荐）</string>
+    <string name="settings_clipboard_clear">剪贴板自动清除</string>
+    <string name="settings_clipboard_off">不自动清除</string>
+    <string name="settings_clipboard_seconds">%1$d 秒</string>
+    <string name="settings_screenshot_block">禁止截屏 / 录屏</string>
+    <string name="settings_screenshot_block_summary">开启后系统与其他应用无法截取本应用画面（调试与截图验证时需临时关闭）</string>
+    <string name="settings_change_password_title">修改主密码</string>
+    <string name="settings_current_password">当前主密码</string>
+    <string name="settings_new_password">新主密码</string>
+    <string name="settings_confirm_new_password">确认新主密码</string>
+    <string name="settings_change_password_action">确认修改</string>
+    <string name="settings_change_password_done">主密码已修改，数据无需重新加密</string>
+    <string name="settings_change_password_failed">修改失败：%1$s</string>
+
+    <string name="settings_backup">备份与恢复</string>
+    <string name="settings_export">导出加密备份</string>
+    <string name="settings_export_summary">生成一个加密文件，可保存到 U 盘、NAS 或你自己的云盘</string>
+    <string name="settings_import">从备份恢复</string>
+    <string name="settings_import_summary">从加密备份文件导入条目，可选择合并或覆盖</string>
+    <string name="settings_backup_password_title">设置备份口令</string>
+    <string name="settings_backup_password_body">备份文件使用独立口令加密。可以留空以复用主密码 —— 但独立口令更安全：备份文件可能长期存放在不受控的位置。</string>
+    <string name="settings_backup_passphrase_source">备份文件的口令</string>
+    <string name="settings_backup_use_own">使用独立口令（推荐）</string>
+    <string name="settings_backup_use_own_detail">备份文件泄露不会连带暴露主密码。适合放到 U 盘、NAS 或云盘。</string>
+    <string name="settings_backup_use_master">使用主密码作为备份口令</string>
+    <string name="settings_backup_use_master_detail">无需另记一个口令；但备份文件的强度就等同于主密码。需要验证一次主密码。</string>
+    <string name="settings_backup_password_min_hint">至少 %1$d 个字符，且两次输入一致</string>
+    <string name="settings_backup_content_title">将备份 %1$d 条记录</string>
+    <string name="settings_backup_empty_title">当前密码库里还没有任何记录</string>
+    <string name="settings_backup_empty_body">此时导出的备份文件是合法且加密的，但里面不含任何凭据。若你刚刚装好应用，请先添加条目再备份。</string>
+    <!-- 按钮不可用时的原因说明：绝不让按钮「莫名置灰」 -->
+    <string name="settings_backup_need_passphrase">请先填写备份口令（或选择「使用主密码作为备份口令」）</string>
+    <string name="settings_backup_passphrase_too_short">备份口令至少需要 %1$d 个字符</string>
+    <string name="settings_backup_confirm_missing">请再次输入备份口令以确认</string>
+    <string name="settings_backup_need_master">请先输入主密码，以便校验</string>
+    <string name="settings_master_password_for_backup">主密码（用于加密备份文件）</string>
+    <string name="settings_backup_master_verify_hint">备份文件将用这个口令重新加密整份数据，因此必须验证正确性。</string>
+    <string name="settings_backup_master_wrong">主密码不正确，已取消导出（未写入任何文件）</string>
+    <string name="settings_backup_password">备份口令</string>
+    <string name="settings_backup_confirm">确认备份口令</string>
+    <string name="settings_export_action">选择保存位置</string>
+    <string name="settings_export_filename_label">将生成的文件名（可在下一步修改）</string>
+    <string name="settings_export_location_hint">点「选择保存位置」会打开系统文件选择器。里面能选到的位置，取决于手机上装了哪些「存储提供方」App —— 系统自带的只有本机存储与「下载」。若想直接存到局域网共享（NAS / 树莓派），需要先用一个支持 SMB / WebDAV 的管理器把网络位置加进来，此后它就会出现在选择器里。</string>
+    <string name="settings_export_location_detail">没有网络位置可选？可先存到本机，再用文件管理器或同步工具传到 NAS / 树莓派。本应用不联网，因此不会也无法直接连接网络共享。</string>
+    <string name="settings_import_action">选择备份文件</string>
+    <string name="settings_export_done">备份已导出到所选位置</string>
+    <string name="settings_export_done_named">备份已写入：%1$s（%2$s）</string>
+    <string name="settings_export_unknown_name">所选位置</string>
+    <string name="settings_export_failed">导出失败：%1$s</string>
+    <string name="settings_export_cancelled">已取消导出（未写入任何文件）</string>
+    <string name="settings_export_interrupted">导出已中断：密码库在文件选择期间被锁定，未写入任何文件。请解锁后重试。</string>
+    <string name="settings_import_cancelled">已取消选择备份文件</string>
+    <string name="settings_import_done">已导入 %1$d 条，跳过重复 %2$d 条</string>
+    <!-- 重名必须被明确提示：同一站点出现两条记录需要用户自己判断是否正常 -->
+    <string name="settings_import_done_duplicates">已导入 %1$d 条，跳过重复 %2$d 条。注意：有 %3$s 与库内已有条目重名，请在操作日志中核对</string>
+    <string name="settings_import_failed">导入失败：%1$s</string>
+    <string name="settings_import_replace">覆盖同 ID 条目</string>
+    <string name="settings_import_replace_summary">关闭时保留本机已有条目，仅新增不重复的内容</string>
+    <string name="settings_backup_warning">备份文件本身已加密。但请记住：备份口令一旦泄露，等于整个密码库泄露。请把备份文件与口令分开存放。</string>
+
+    <string name="settings_autofill">自动填充</string>
+    <string name="settings_autofill_summary">在其他 App 和浏览器中安全填充账号密码</string>
+    <string name="settings_autofill_open">打开系统自动填充设置</string>
+    <string name="settings_autofill_howto">在系统「设置 → 密码与账号 → 自动填充服务」中选择「密码库」，即可在浏览器与 App 的登录框中使用指纹填充。</string>
+
+    <string name="settings_audit">安全自证</string>
+    <string name="settings_audit_summary">查看本应用的权限、加密参数与完整性校验结果</string>
+    <string name="settings_operation_log">操作日志</string>
+    <string name="settings_operation_log_summary">查看最近 30 天的删除条目、修改密码、修改名称与备份导入导出记录</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_version">版本 %1$s</string>
+
+    <!-- ==================== 安全自证 ==================== -->
+    <string name="audit_title">安全自证</string>
+    <string name="audit_intro">以下信息全部来自本机应用的运行时与 APK 自身，不依赖任何服务器。你可以据此独立验证本应用「离线、零网络、可自证」的声明。</string>
+    <string name="audit_network_title">网络权限</string>
+    <string name="audit_network_ok">未声明任何网络权限。系统内核会拒绝本应用创建网络套接字，因此本应用在技术上不可能联网。</string>
+    <string name="audit_network_bad">检测到网络权限！这不应发生，请立即停止使用并检查 APK 来源。</string>
+    <string name="audit_permissions_title">已声明的全部权限</string>
+    <string name="audit_crypto_title">加密参数</string>
+    <string name="audit_kdf">密钥派生</string>
+    <string name="audit_kdf_not_created">Argon2id（尚未创建密码库）</string>
+    <string name="audit_cipher">对称加密</string>
+    <string name="audit_integrity">完整性校验</string>
+    <string name="audit_key_size">数据密钥长度</string>
+    <string name="audit_key_size_value">256 bit（AES-256）</string>
+    <string name="audit_envelope_key_id">密钥库标识</string>
+    <string name="audit_integrity_title">数据库完整性校验</string>
+    <string name="audit_integrity_run">重新校验</string>
+    <string name="audit_integrity_running">正在校验…</string>
+    <string name="audit_integrity_ok">通过：%1$d 条记录全部通过 HMAC-SHA256 校验</string>
+    <string name="audit_integrity_failed">校验失败：%1$d 条记录被篡改或损坏</string>
+    <string name="audit_apk_title">安装包信息</string>
+    <string name="audit_apk_package">包名</string>
+    <string name="audit_apk_version">版本</string>
+    <string name="audit_apk_sha256">APK SHA-256</string>
+    <string name="audit_apk_sha256_unavailable">无法读取 APK 路径（可能通过应用商店增量安装）</string>
+    <string name="audit_signer_title">签名证书 SHA-256</string>
+    <string name="audit_signer_unavailable">无法读取签名信息</string>
+    <string name="audit_debug_title">调试状态</string>
+    <string name="audit_debug_on">应用可被调试（debug 构建）</string>
+    <string name="audit_debug_off">应用不可被调试</string>
+    <string name="audit_backup_title">系统备份</string>
+    <string name="audit_backup_off">已禁止系统云备份与 adb backup，密文库不会被系统上传</string>
+    <string name="audit_dependencies_title">第三方依赖</string>
+    <string name="audit_dependencies_body">AndroidX（UI、Room 数据库、Biometric）、Kotlin 标准库与 kotlinx.serialization、BouncyCastle（仅 Argon2id）。全部为开源库，无广告、无统计、无分析 SDK。</string>
+    <string name="audit_copy">复制报告</string>
+    <string name="audit_copied">报告已复制到剪贴板</string>
+
+    <!-- ==================== 操作日志 ==================== -->
+    <string name="oplog_title">操作日志</string>
+    <string name="oplog_intro">下面是最近 %1$d 天的重要操作。日志只记录操作类型、时间与名称，不含任何密码、用户名或备份口令；它保存在应用私有目录中，也不会随备份文件导出。</string>
+    <string name="oplog_empty">最近 %1$d 天没有任何重要操作</string>
+    <string name="oplog_empty_hint">删除条目、修改主密码、修改站点名称、导出或导入备份时，这里会出现记录。</string>
+
+    <!-- 操作类型（日志按语言即时渲染，因此历史记录不会有中英混杂的旧句子） -->
+    <string name="oplog_kind_entry_deleted">删除条目</string>
+    <string name="oplog_kind_entry_deleted_detail">删除条目（详情页）</string>
+    <string name="oplog_kind_password_changed">修改主密码</string>
+    <string name="oplog_kind_site_renamed">修改站点 / 应用名称</string>
+    <string name="oplog_kind_exported">导出备份</string>
+    <string name="oplog_kind_imported">从备份恢复</string>
+
+    <!-- 每条日志的细节 -->
+    <string name="oplog_detail_site">名称：%1$s</string>
+    <string name="oplog_detail_renamed">名称由「%1$s」改为「%2$s」</string>
+    <string name="oplog_detail_password_note">主密码已重新设置；条目未重新加密，数据不受影响</string>
+    <string name="oplog_detail_exported">导出 %1$d 条记录</string>
+    <string name="oplog_detail_imported">导入 %1$d 条，按 ID 跳过重复 %2$d 条</string>
+    <string name="oplog_detail_file">文件：%1$s</string>
+    <!-- 重名必须被明确标出：同一站点出现两条记录到底是不是有意为之，只有用户能判断 -->
+    <string name="oplog_detail_duplicates">⚠ 与库内已有条目重名：%1$s</string>
+    <string name="oplog_detail_duplicates_more">⚠ 另有 %1$d 个重名未列出</string>
+    <string name="oplog_unnamed">（未命名）</string>
+
+    <!-- ==================== 自动填充 ==================== -->
+    <string name="autofill_service_label">密码库</string>
+    <string name="autofill_auth_label">验证以填充</string>
+    <string name="autofill_auth_title">验证身份</string>
+    <string name="autofill_auth_subtitle">填充密码前需要验证指纹或主密码</string>
+    <string name="autofill_dataset_label">密码库：%1$s</string>
+    <string name="autofill_no_match">密码库中没有匹配该站点的条目</string>
+    <string name="autofill_locked">密码库已锁定，请先解锁</string>
+
+    <!-- ==================== 时间单位（爆破耗时换算） ==================== -->
+    <!-- 这些串只用于「多久能爆破」的可读换算，数字由代码给出，语言由系统决定 -->
+    <string name="time_instant">瞬间</string>
+    <string name="time_seconds">%1$s 秒</string>
+    <string name="time_minutes">%1$s 分钟</string>
+    <string name="time_hours">%1$s 小时</string>
+    <string name="time_days">%1$s 天</string>
+    <string name="time_years">%1$s 年</string>
+    <string name="time_millennia">%1$s 千年</string>
+    <string name="time_beyond_universe">远超宇宙年龄（> 1000 年）</string>
+
+    <!-- ==================== 界面语言 ==================== -->
+    <string name="settings_language">界面语言</string>
+    <string name="settings_language_summary">选择应用界面使用的语言</string>
+    <string name="settings_language_system">跟随系统</string>
+    <string name="settings_language_zh">简体中文</string>
+    <string name="settings_language_en">English</string>
+
+    <!-- ==================== 安全自证：纯文本报告 ==================== -->
+    <!-- 这些串用于「复制报告」生成的纯文本，因此刻意保持等宽对齐的排版 -->
+    <string name="audit_report_title">===== MyVault 安全自证报告 =====</string>
+    <string name="audit_report_generated_at">生成时间: %1$s</string>
+    <string name="audit_report_section_package">[包信息]</string>
+    <string name="audit_report_label_package">包名</string>
+    <string name="audit_report_label_version">版本</string>
+    <string name="audit_report_label_api">Android API</string>
+    <string name="audit_report_section_network">[网络能力]</string>
+    <string name="audit_report_label_result">结果</string>
+    <string name="audit_report_network_clean">未声明任何网络相关权限 ✔</string>
+    <string name="audit_report_network_clean_note_1">没有 INTERNET 权限的进程无法创建 socket（内核层拒绝），</string>
+    <string name="audit_report_network_clean_note_2">因此本应用在技术上不可能产生网络流量。</string>
+    <string name="audit_report_network_bad">检测到网络权限 ✘</string>
+    <string name="audit_report_section_permissions">[已声明的全部权限]</string>
+    <string name="audit_report_none">（无）</string>
+    <string name="audit_report_section_crypto">[加密参数]</string>
+    <string name="audit_report_label_kdf">密钥派生</string>
+    <string name="audit_report_label_cipher">对称加密</string>
+    <string name="audit_report_label_data_key">数据密钥</string>
+    <string name="audit_report_data_key_value">AES-256（256 bit）</string>
+    <string name="audit_report_label_integrity">完整性</string>
+    <string name="audit_report_integrity_value">AES-GCM 认证标签 128 bit + 库级 HMAC-SHA256</string>
+    <string name="audit_report_section_apk">[安装包完整性]</string>
+    <string name="audit_report_label_apk_sha256">APK SHA-256</string>
+    <string name="audit_report_label_signer">签名证书</string>
+    <string name="audit_report_unavailable_incremental">无法读取（可能是增量安装）</string>
+    <string name="audit_report_unavailable">无法读取</string>
+    <string name="audit_report_section_other">[其他]</string>
+    <string name="audit_report_label_debuggable">可调试</string>
+    <string name="audit_report_debuggable_yes">是（debug 构建）</string>
+    <string name="audit_report_debuggable_no">否</string>
+    <string name="audit_report_label_system_backup">系统备份</string>
+    <string name="audit_report_backup_allowed">允许（异常！）</string>
+    <string name="audit_report_backup_disabled">已禁止</string>
+    <string name="audit_report_label_fingerprint_hw">指纹硬件</string>
+    <string name="audit_report_hw_present">存在</string>
+    <string name="audit_report_hw_absent">不存在</string>
+    <string name="audit_report_unknown_version">未知</string>
+
+    <!-- ==================== 安全自证界面（补全） ==================== -->
+    <string name="audit_permissions_none">（无）</string>
+    <string name="audit_integrity_value">HMAC-SHA256（信封 + 全库校验和）</string>
+    <string name="audit_integrity_pending">尚未校验。点击下方按钮立即计算全库 HMAC-SHA256 并逐条验证 GCM 认证标签。</string>
+    <string name="audit_integrity_passed">校验通过</string>
+    <string name="audit_integrity_not_passed">校验未通过</string>
+    <string name="audit_integrity_total">条目总数</string>
+    <string name="audit_integrity_checksum">库校验和</string>
+    <string name="audit_integrity_checked_at">校验和时间</string>
+    <string name="audit_integrity_bad_entries">受影响的条目 ID：\n%1$s</string>
+
+    <!-- ==================== 设置：补全 ==================== -->
+    <string name="settings_about_summary">%1$s  ·  %2$d 条  ·  key %3$s</string>
+    <string name="settings_biometric_enable_title">开启指纹解锁</string>
+    <string name="settings_biometric_enable_body">请输入主密码以确认。指纹密钥由设备安全芯片保护，并会在你新增或删除指纹后自动失效。</string>
+    <string name="settings_biometric_disable_title">关闭指纹解锁</string>
+    <string name="settings_biometric_disable_body">请输入主密码以确认。关闭后需用主密码解锁，已保存的指纹密钥会被删除。</string>
+    <string name="settings_change_password_note">修改主密码不会重新加密任何条目：新口令只是重新包裹同一把数据密钥，因此操作是瞬间完成的。</string>
+
+    <!-- ==================== 条目列表：补全 ==================== -->
+    <string name="list_entry_count">%1$d 条</string>
+
+    <!-- ==================== 条目 / 密码库错误提示 ==================== -->
+    <string name="entry_unnamed">（未命名）</string>
+    <!-- 站点名为空时的列表标题。与 entry_unnamed 分开：条目名可能本身就写作「未命名」 -->
+    <string name="entry_display_title">（未命名）</string>
+    <string name="error_vault_locked">密码库已锁定</string>
+    <string name="error_cannot_write_location">无法写入所选位置（授权可能已失效）</string>
+    <string name="error_cannot_read_file">无法读取所选文件</string>
+    <string name="error_create_failed">创建失败</string>
+    <string name="error_unlock_failed">解锁失败</string>
+    <string name="error_biometric_unlock_failed">指纹解锁失败</string>
+    <string name="error_delete_failed">删除失败</string>
+    <string name="error_enable_biometric_failed">开启指纹失败</string>
+    <string name="error_disable_biometric_failed">关闭指纹失败</string>
+    <string name="error_vault_already_exists">密码库已存在，不能重复创建</string>
+    <string name="error_vault_not_created">密码库尚未创建</string>
+    <string name="error_vault_not_unlocked">密码库未解锁</string>
+    <string name="error_missing_application">缺少 Application，无法创建 EntryEditViewModel</string>
+    <string name="audit_report_file_name">MyVault 安全自证报告</string>
+
+    <!-- ==================== 通用 ==================== -->
+    <string name="common_ok">确定</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_back">返回</string>
+    <string name="common_close">关闭</string>
+    <string name="common_yes">是</string>
+    <string name="common_no">否</string>
+    <string name="common_error">出错了</string>
+    <string name="common_loading">加载中…</string>
+    <string name="common_confirm">确认</string>
+
+    <!-- 无障碍描述 -->
+    <string name="cd_add_entry">添加新条目</string>
+    <string name="cd_settings">设置</string>
+    <string name="cd_generate_password">生成新密码</string>
+    <string name="cd_copy">复制</string>
+</resources>

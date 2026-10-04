@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      深色模式下的窗口主题。
+      Compose 一侧的配色由 MyVaultTheme(isSystemInDarkTheme()) 负责；
+      这里只保证窗口背景与系统栏在切换明暗时不会闪白。
+    -->
+    <style name="Theme.MyVault" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/vault_background_dark</item>
+        <item name="android:statusBarColor">@color/vault_background_dark</item>
+        <item name="android:navigationBarColor">@color/vault_background_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>
