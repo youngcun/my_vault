@@ -164,6 +164,14 @@ dependencies {
     // Argon2id 实现（纯 Java，无 native 依赖，离线可用）
     implementation(libs.bouncycastle.prov)
 
+    // 二维码：编解码用 ZXing（纯 Java，可被纯 JVM 单元测试直接覆盖），
+    // 取景用 CameraX（AOSP 官方库）。两者都不需要 Play 服务、不联网。
+    implementation(libs.zxing.core)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)

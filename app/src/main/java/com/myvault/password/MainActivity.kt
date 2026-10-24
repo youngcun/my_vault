@@ -60,20 +60,24 @@ import com.myvault.password.core.CryptoPrimitives
 import com.myvault.password.core.EnvelopeCodec
 import com.myvault.password.core.KeystoreManager
 import com.myvault.password.core.PasswordPolicy
+import com.myvault.password.domain.VaultEntry
 import com.myvault.password.ui.AuditViewModel
 import com.myvault.password.ui.EntryEditViewModel
 import com.myvault.password.ui.LockState
 import com.myvault.password.ui.MainViewModel
 import com.myvault.password.ui.MainUiState
 import com.myvault.password.ui.OperationLogViewModel
+import com.myvault.password.ui.QrImportViewModel
 import com.myvault.password.ui.SettingsViewModel
 import com.myvault.password.ui.components.LocalUserActivity
 import com.myvault.password.ui.screens.AuditScreen
 import com.myvault.password.ui.screens.EntryEditScreen
+import com.myvault.password.ui.screens.EntryQrDialog
 import com.myvault.password.ui.screens.GeneratorScreen
 import com.myvault.password.ui.screens.LockScreen
 import com.myvault.password.ui.screens.OperationLogScreen
 import com.myvault.password.ui.screens.PasswordConfirmDialog
+import com.myvault.password.ui.screens.QrImportScreen
 import com.myvault.password.ui.screens.SettingsScreen
 import com.myvault.password.ui.screens.SetupScreen
 import com.myvault.password.ui.screens.VaultListScreen
@@ -891,6 +895,11 @@ private fun UnlockedVaultNavigation(
 ) {
     val navController = rememberNavController()
 
+    // 「显示为二维码」的目标条目。放在导航层而不是列表页里：
+    // 列表页只负责展示与回调，弹窗属于「跨界面的一次性交互」，
+    // 和下面的「导入备份口令」对话框是同一类东西。
+    var qrEntry by remember { mutableStateOf<VaultEntry?>(null) }
+
     // 只有走到这里才说明库已解锁，允许渲染密码库导航图。
     // 用户交互采集容器也放在这一支里：解锁界面上的触摸不参与自动锁定判定。
     //
@@ -941,6 +950,7 @@ private fun UnlockedVaultNavigation(
                 },
                 onCleanupBrokenEntries = mainViewModel::deleteBrokenEntries,
                 onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                onShowQr = { entry -> qrEntry = entry },
                 onLock = mainViewModel::lock,
                 onMessageShown = mainViewModel::consumeMessage,
             )
@@ -1047,6 +1057,7 @@ private fun UnlockedVaultNavigation(
                     onCreateBackupFile(backupPassphrase, isMasterPassword)
                 },
                 onImportBackup = onPickBackupFile,
+                onOpenQrImport = { navController.navigate(Routes.QR_IMPORT) },
                 onOpenAutofillSettings = {
                     runCatching {
                         activity.startActivity(Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE))
@@ -1095,6 +1106,28 @@ private fun UnlockedVaultNavigation(
                 onBack = { navController.popBackStack() },
             )
         }
+
+        // 扫码导入：一条独立的路由，而不是在列表页弹对话框。
+        // 它要用相机、可能重试口令、还要显示解析结果，内容多到不适合作弹窗。
+        composable(Routes.QR_IMPORT) {
+            val qrViewModel: QrImportViewModel = viewModel()
+            val qrState by qrViewModel.state.collectAsState()
+
+            QrImportScreen(
+                state = qrState,
+                onBack = { navController.popBackStack() },
+                onScanResult = qrViewModel::onScanResult,
+                onUnlock = qrViewModel::unlockSealed,
+                onImport = qrViewModel::importCredential,
+                onRescan = qrViewModel::rescan,
+                onTogglePasswordVisible = qrViewModel::togglePasswordVisible,
+                onImported = { title ->
+                    // 提示交给列表页显示：本界面马上就要被弹出返回栈了
+                    mainViewModel.notify(activity.getString(R.string.qr_import_success, title))
+                    navController.popBackStack()
+                },
+            )
+        }
     }
     }   // Box（用户交互采集容器）
 
@@ -1110,6 +1143,14 @@ private fun UnlockedVaultNavigation(
                 onImportPassphrase(importUri, pwd)
                 onClearImport()
             },
+        )
+    }
+
+    // 把一条条目显示成二维码（口令加密 / 明文由对话框自己选择）
+    qrEntry?.let { entry ->
+        EntryQrDialog(
+            entry = entry,
+            onDismiss = { qrEntry = null },
         )
     }
 }
@@ -1187,6 +1228,9 @@ private object Routes {
     const val SETTINGS = "settings"
     const val AUDIT = "audit"
     const val OPERATION_LOG = "operation_log"
+
+    /** 扫码导入（相机 / 图片识别 → 预览 → 写入密码库）。 */
+    const val QR_IMPORT = "qr_import"
 
     /**
      * 条目路由。

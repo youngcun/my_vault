@@ -13,13 +13,16 @@
   3. 不声明 android:usesCleartextTraffic，也不声明任何 backup agent，
      避免系统云备份把密文库上传到云端。
   4. allowBackup=false：即使 adb backup 也无法导出应用数据目录。
+  5. 权限面只有两条：指纹（normal，安装即授予）与相机（dangerous，运行时授权，
+     仅用于扫码导入，可拒绝、可随时撤销）。没有存储、定位、通讯录、短信等任何权限；
+     文件读写一律走 SAF，由用户逐次授权单个 URI。
   ============================================================================
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-      唯一需要的普通权限：指纹/生物识别。它属于 normal 级别，
+      指纹/生物识别权限。它属于 normal 级别，
       不涉及网络与存储，由系统在安装时自动授予。
     -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
@@ -34,6 +37,20 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- 用于在生物识别时请求系统锁屏校验（可选降级路径） -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!--
+      相机：**唯一**用途是「扫码导入」时取景识别二维码。
+      - 属于 dangerous 权限，必须由用户在运行时显式授予；
+        拒绝不影响任何其他功能（还可以把二维码当图片识别）。
+      - 画面只在内存里逐帧二值化，不落盘、不截取、不上传（本应用没有网络权限）。
+      安全自证页会如实列出运行中的应用持有哪些权限，用户可随时在系统设置里撤销。
+    -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 硬件要求：没有相机的设备也能安装（改用「从图片识别」导入） -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
 
     <!-- 硬件要求：指纹模块为可选，无指纹设备仍可用主密码解锁 -->
     <uses-feature

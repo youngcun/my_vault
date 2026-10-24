@@ -86,6 +86,8 @@ fun EntryEditScreen(
 ) {
     var confirmDelete by remember { mutableStateOf(false) }
     var generatorOpen by remember { mutableStateOf(false) }
+    // 改过密码后点「保存」时的二次确认（见下方对话框）
+    var confirmSave by remember { mutableStateOf(false) }
 
     val policyBits = remember(state.policy) { PasswordEntropy.bitsOf(state.policy) }
 
@@ -265,7 +267,10 @@ fun EntryEditScreen(
 
             Spacer(Modifier.height(20.dp))
             Button(
-                onClick = onSave,
+                // 改成「先确认再保存」而不是直接保存：只有**改动过密码**才拦。
+                // 判定由 ViewModel 给出（规则见 EntryEditRules.passwordChangedDuringEdit），
+                // 界面只负责把「改的是哪一条」摆到确认框里。
+                onClick = { if (state.passwordChanged) confirmSave = true else onSave() },
                 enabled = state.entry.site.isNotBlank() &&
                     state.entry.password.isNotEmpty() &&
                     !state.working,
@@ -290,6 +295,45 @@ fun EntryEditScreen(
             }
             Spacer(Modifier.height(28.dp))
         }
+    }
+
+    if (confirmSave) {
+        // 二次确认：**必须点出当前条目的应用名称** —— 这正是这个对话框存在的理由。
+        //
+        // 密码字段在保存前是可见的，用户常常从别处复制新密码再回来粘贴；
+        // 一旦此时打开的其实不是本来那条记录，直接保存就会静默覆盖另一条
+        // 记录的旧密码，而旧密码在本应用里不可恢复。把名称摆到眼前，
+        // 用户才有可能在按下去之前发现「我改的不是这一条」。
+        //
+        // 刻意**不复述密码内容**：确认框要做的是核对「改的是哪一条」，
+        // 不是再展示一次密码 —— 多展示一次只会多一处泄露面。
+        AlertDialog(
+            onDismissRequest = { confirmSave = false },
+            title = { Text(stringResource(R.string.entry_save_confirm_title)) },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.entry_save_confirm_body,
+                        // 与删除确认、列表、自动填充用同一个标题来源：
+                        // 名称留空时按当前语言回退，不会露出中文占位符。
+                        localizedDisplayTitle(state.entry),
+                    ),
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmSave = false
+                    onSave()
+                }) {
+                    Text(stringResource(R.string.entry_save_confirm_action))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmSave = false }) {
+                    Text(stringResource(R.string.entry_cancel))
+                }
+            },
+        )
     }
 
     if (confirmDelete) {

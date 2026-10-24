@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.LockClock
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -107,6 +108,8 @@ fun SettingsScreen(
      */
     onExportBackup: (passphrase: CharArray, isMasterPassword: Boolean) -> Unit,
     onImportBackup: () -> Unit,
+    /** 打开扫码导入（相机 / 图片识别 → 预览 → 写入密码库）。 */
+    onOpenQrImport: () -> Unit,
     onOpenAutofillSettings: () -> Unit,
     onOpenAudit: () -> Unit,
     /** 打开操作日志（最近 30 天的删除、改密、改名与备份记录）。 */
@@ -257,6 +260,12 @@ fun SettingsScreen(
                 title = stringResource(R.string.settings_import),
                 subtitle = stringResource(R.string.settings_import_summary),
                 onClick = onImportBackup,
+            )
+            SettingsRow(
+                icon = Icons.Default.QrCodeScanner,
+                title = stringResource(R.string.qr_import_entry),
+                subtitle = stringResource(R.string.qr_import_entry_summary),
+                onClick = onOpenQrImport,
             )
             SettingsSwitchRow(
                 icon = Icons.Default.FileUpload,

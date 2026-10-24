@@ -24,6 +24,14 @@ data class EntryEditState(
     val isNew: Boolean = true,
     val passwordVisible: Boolean = false,
     val lastGeneratedPlain: String? = null,
+    /**
+     * 密码是否被改动过（相对打开编辑界面时该条目的原密码）。
+     *
+     * 界面据此在保存前插入一次二次确认，并在确认框里点出**当前条目的应用名称**，
+     * 避免在错误的条目上覆盖密码。新建条目恒为 false。
+     * 判定规则本身在 [EntryEditRules.passwordChangedDuringEdit]（纯函数，有单测）。
+     */
+    val passwordChanged: Boolean = false,
     val policy: PasswordPolicy = PasswordPolicy(),
     val error: String? = null,
     /**
@@ -76,6 +84,15 @@ class EntryEditViewModel(
      */
     private var originalSite: String? = null
 
+    /**
+     * 打开编辑界面时该条目的密码原文。
+     *
+     * 只用于判断「这一次保存是否真的改了密码」（见 [EntryEditState.passwordChanged]），
+     * 从不回显到界面 —— 界面显示的一律是 [EntryEditState.entry] 里当前正在编辑的值。
+     * 新建条目为 null：那时不存在「原来的密码」可覆盖。
+     */
+    private var originalPassword: String? = null
+
     init {
         viewModelScope.launch {
             if (entryId == null) {
@@ -105,12 +122,15 @@ class EntryEditViewModel(
                 // 原名称只在真正读到条目时记录：读不到（例如条目已损坏）时
                 // 不该把 null 当成「用户把名字改成了空」这类噪音记录进日志。
                 originalSite = existing?.site
+                // 同理，原密码只在读到条目时才有得比；读不到时保持 null，
+                // 也就不会因为「空 vs 输入值」误判成一次改密。
+                originalPassword = existing?.password
                 _state.update {
                     it.copy(
                         loading = false,
                         isNew = false,
                         entry = existing ?: VaultEntry.empty().copy(id = entryId),
-                    )
+                    ).withPasswordChangeFlag()
                 }
             }
         }
@@ -138,10 +158,27 @@ class EntryEditViewModel(
      * 这里显式命名 lambda 参数（而不是用 `it`）是必要的：Kotlin 里嵌套 lambda
      * 的隐式 `it` 会被内层遮蔽，极易写成「对外层状态调用 copy」这种错误，
      * 而且编译器的报错信息（No parameter with name 'site'）并不会直接指向根因。
+     *
+     * 每次改动后都重算一次 [EntryEditState.passwordChanged]：把同步放在这个
+     * 唯一入口里，而不是只加在 [updatePassword] 中 —— 将来任何新的「写密码」
+     * 入口都自动继承这条规则，不会出现「改了密码却不二次确认」的静默缺口。
      */
     private inline fun editEntry(block: (VaultEntry) -> VaultEntry) {
-        _state.update { state -> state.copy(entry = block(state.entry)) }
+        _state.update { state -> state.copy(entry = block(state.entry)).withPasswordChangeFlag() }
     }
+
+    /**
+     * 按 [EntryEditRules.passwordChangedDuringEdit] 重算「密码是否被改动」。
+     *
+     * 幂等：只用「原密码 vs 当前值」计算，与调用次数无关。
+     */
+    private fun EntryEditState.withPasswordChangeFlag(): EntryEditState = copy(
+        passwordChanged = EntryEditRules.passwordChangedDuringEdit(
+            isNew = isNew,
+            originalPassword = originalPassword,
+            currentPassword = entry.password,
+        ),
+    )
 
     /** 按当前策略重新生成密码并直接写入条目（密码字段可见，便于用户确认）。 */
     fun regenerate() {
@@ -156,7 +193,7 @@ class EntryEditViewModel(
                         lastGeneratedPlain = generated,
                         error = null,
                         policyError = null,
-                    )
+                    ).withPasswordChangeFlag()
                 }
             } catch (e: IllegalArgumentException) {
                 // 文案由界面按当前语言渲染（见 EntryEditState.policyError 的说明）。

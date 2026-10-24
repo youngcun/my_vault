@@ -4,7 +4,8 @@ An offline-first, **zero-network-permission**, self-verifying local password man
 
 Generates strong passwords (random, memorable passphrase, or PIN), stores credentials encrypted with
 Argon2id + AES-256-GCM, fills them into other apps and browsers through the system autofill
-framework, supports fingerprint unlock, and exports/imports encrypted backups that you keep yourself.
+framework, supports fingerprint unlock, exports/imports encrypted backups that you keep yourself, and
+hands a single credential to another device as a QR code.
 The UI ships in English and Simplified Chinese.
 
 <!-- Screenshots: docs/screenshots/01-setup.png is still the Chinese UI, so it is not
@@ -30,6 +31,9 @@ The UI ships in English and Simplified Chinese.
 - **Encrypted vault** — field-level AES-256-GCM, keyed through Argon2id, so ciphertext cannot be moved
   between entries or fields. Credentials are never written to disk in plaintext.
 - **Favourites and search** — mark entries as favourites; search across site and username.
+- **Guarded password edits** — changing an entry's password asks for a second confirmation that names
+  the entry, so a new password cannot be silently written over the wrong record. Saving without
+  touching the password, and creating a new entry, are not interrupted.
 - **System autofill** — fills credentials into other apps and browsers through the Android autofill
   framework. Every fill requires fingerprint or master-password confirmation, and the confirmation
   shows the target site. Only the site name and username ever appear in suggestions, never passwords.
@@ -38,6 +42,11 @@ The UI ships in English and Simplified Chinese.
 - **Encrypted backups** — export and import self-contained encrypted files you keep yourself. The
   backup passphrase can be separate from the master password; imports report duplicate names rather
   than silently writing them.
+- **QR hand-over** — show one entry as a QR code (encrypted with a passphrase by default, plain text
+  for a one-off hand-over) and import it on another device by scanning it. The camera is optional —
+  QR codes can also be read from an image — and nothing is written to the vault until you confirm
+  the parsed fields. A Windows/macOS “save your passkey” QR code can never be imported: it is a live
+  cross-device handshake, not data, and the key it creates never leaves the device that holds it.
 - **Operation log** — read-only record of the last 30 days of deletions, master-password changes,
   renames and backup transfers. It never stores credentials.
 - **Security audit screen** — shows every permission the running app holds, the KDF parameters, the
@@ -54,7 +63,7 @@ The UI ships in English and Simplified Chinese.
 Requires JDK 17–22, Android SDK platform 34, and Gradle 8.9.
 
 ```cmd
-build.cmd test            :: 154 JVM unit tests
+build.cmd test            :: 192 JVM unit tests
 build.cmd assembleDebug   :: produces app\build\outputs\apk\debug\app-debug.apk
 
 adb install -r -g app\build\outputs\apk\debug\app-debug.apk
@@ -107,7 +116,8 @@ The audit screen also copies out a plain-text report, so you can hand it to a th
 ## License
 
 Released under the **MIT License** — see [LICENSE](LICENSE). Third-party dependencies keep their own
-licenses: AndroidX, Kotlin, kotlinx.serialization and BouncyCastle are Apache-2.0, and JUnit 4 is
+licenses: AndroidX (including CameraX), Kotlin, kotlinx.serialization, BouncyCastle and ZXing are
+Apache-2.0, and JUnit 4 is
 EPL-1.0 (test-only, not distributed in the APK). All are permissive and compatible with MIT.
 
 Provided **as is**, with no warranty, and it has **not** been third-party security audited. Verify it

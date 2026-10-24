@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -90,6 +91,8 @@ fun VaultListScreen(
     onCopy: (VaultEntry, String, Boolean) -> Unit,
     onCleanupBrokenEntries: () -> Unit,
     onOpenSettings: () -> Unit,
+    /** 把一条凭据显示成二维码（用于导出到另一台设备）。 */
+    onShowQr: (VaultEntry) -> Unit,
     onLock: () -> Unit,
     onMessageShown: () -> Unit,
 ) {
@@ -236,6 +239,7 @@ fun VaultListScreen(
                             onDelete = { pendingDelete = entry },
                             onCopyUsername = { onCopy(entry, entry.username, false) },
                             onCopyPassword = { onCopy(entry, entry.password, true) },
+                            onShowQr = { onShowQr(entry) },
                         )
                     }
                 }
@@ -342,6 +346,7 @@ private fun EntryRow(
     onDelete: () -> Unit,
     onCopyUsername: () -> Unit,
     onCopyPassword: () -> Unit,
+    onShowQr: () -> Unit,
 ) {
     var menuOpen by remember { mutableStateOf(false) }
 
@@ -440,6 +445,11 @@ private fun EntryRow(
                             )
                         },
                         onClick = { menuOpen = false; onToggleFavorite() },
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.entry_show_qr)) },
+                        leadingIcon = { Icon(Icons.Default.QrCode2, contentDescription = null) },
+                        onClick = { menuOpen = false; onShowQr() },
                     )
                     DropdownMenuItem(
                         text = {

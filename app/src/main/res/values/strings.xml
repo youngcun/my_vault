@@ -78,6 +78,10 @@
     <string name="entry_favorite_toggle">收藏</string>
     <string name="entry_updated_at">更新于 %1$s</string>
     <string name="entry_saving">正在保存…</string>
+    <!-- 改过密码后点「保存」的二次确认：正文必须点出当前条目的应用名称（%1$s） -->
+    <string name="entry_save_confirm_title">确认保存新密码</string>
+    <string name="entry_save_confirm_body">你修改了「%1$s」的密码。保存后会替换该条目已存储的密码，原密码将无法恢复。</string>
+    <string name="entry_save_confirm_action">确认保存</string>
     <string name="entry_save_failed">保存失败：%1$s</string>
     <string name="entry_save_unreadable">保存后无法读回该条目。为避免留下损坏数据，已停止操作；请重试或重启应用。</string>
 
@@ -383,6 +387,81 @@
     <string name="error_vault_not_unlocked">密码库未解锁</string>
     <string name="error_missing_application">缺少 Application，无法创建 EntryEditViewModel</string>
     <string name="audit_report_file_name">MyVault 安全自证报告</string>
+
+    <!-- ==================== 二维码：扫码导入 ==================== -->
+    <string name="qr_import_title">扫码导入</string>
+    <string name="qr_import_entry">从二维码导入</string>
+    <string name="qr_import_entry_summary">扫描另一台设备上的凭据二维码；相机不可用时也可以从图片识别。</string>
+    <string name="qr_scan_hint">把二维码放进取景框。识别成功后还需要你确认，才会写入密码库。</string>
+    <string name="qr_permission_title">需要相机权限</string>
+    <string name="qr_permission_body">相机只用于取景识别二维码：画面不保存、也不上传（本应用没有网络权限）。不授权也可以改用「从图片识别」。</string>
+    <string name="qr_permission_grant">授权相机</string>
+    <string name="qr_no_camera_title">这台设备没有可用的相机</string>
+    <string name="qr_no_camera_body">你仍然可以用「从图片识别」导入：先把二维码截图或拍照，再从相册选出来。</string>
+    <string name="qr_from_image">从图片识别</string>
+    <string name="qr_from_image_hint">适合相机不可用，或二维码本身就在这台设备上的情况。</string>
+    <string name="qr_image_decoding">正在识别图片…</string>
+    <string name="qr_image_no_code">这张图片里没有找到可读的二维码。</string>
+    <string name="qr_camera_failed_title">相机无法启动</string>
+    <string name="qr_camera_failed_body">可能被其他应用占用，或设备只有前置相机。可以改用「从图片识别」。</string>
+    <string name="qr_rescan">重新扫描</string>
+    <string name="qr_preview_title">识别结果</string>
+    <string name="qr_preview_site">站点</string>
+    <string name="qr_preview_username">用户名</string>
+    <string name="qr_preview_password">密码</string>
+    <string name="qr_show_password">显示密码</string>
+    <string name="qr_hide_password">隐藏密码</string>
+    <string name="qr_preview_url">网址</string>
+    <string name="qr_preview_notes">备注</string>
+    <string name="qr_import_action">导入到密码库</string>
+    <string name="qr_import_success">已导入「%1$s」</string>
+    <string name="qr_duplicate_title">密码库里已有同名条目</string>
+    <string name="qr_duplicate_body">已存在「%1$s」。导入后会多出一条同名记录；如果这不是另一个账号，请先取消。</string>
+    <string name="qr_save_failed">写入失败：密码库可能已经锁定。请返回解锁后再试。</string>
+    <string name="qr_sealed_title">这个二维码是加密的</string>
+    <string name="qr_sealed_body">请输入生成二维码时设置的口令。口令错误与内容被篡改在密码学上无法区分，因此两者都会表现为「打不开」。</string>
+    <string name="qr_sealed_passphrase">二维码口令</string>
+    <string name="qr_sealed_unlock">解开</string>
+    <string name="qr_sealed_wrong">口令错误，或二维码内容已被篡改。</string>
+    <string name="qr_unsupported_passkey_title">这是「保存通行密钥」的二维码</string>
+    <string name="qr_unsupported_passkey_body">它里面没有任何可以导入的密码：二维码只携带隧道地址与一次性密钥，手机需要先和电脑建立一条加密通道，才可能完成密钥生成；私钥始终不会出现在二维码里。本应用没有网络权限，无法参与这次握手。\n\n如果你想保存的是密码，请让对方改用 MyVault 生成的凭据二维码。</string>
+    <string name="qr_unsupported_totp_title">这是动态口令（TOTP）二维码</string>
+    <string name="qr_unsupported_totp_body">本应用目前只保存密码，不保存一次性验证码。</string>
+    <string name="qr_unsupported_wifi_title">这是 Wi-Fi 配置二维码</string>
+    <string name="qr_unsupported_wifi_body">它包含网络名称与 Wi-Fi 口令，不是登录凭据，因此不会被导入密码库。</string>
+    <string name="qr_unsupported_other_title">无法识别这个二维码</string>
+    <string name="qr_unsupported_other_body">本应用只支持以 myvault:// 开头的凭据二维码（由本应用的「显示为二维码」生成）。</string>
+    <string name="qr_error_title">二维码内容不完整</string>
+    <string name="qr_error_empty">二维码里没有任何内容。</string>
+    <string name="qr_error_too_long">二维码内容过长，超出本应用接受的范围。</string>
+    <string name="qr_error_not_myvault">这不是本应用的凭据二维码。</string>
+    <string name="qr_error_bad_format">二维码结构损坏，可能只扫到了一部分。</string>
+    <string name="qr_error_bad_version">二维码的版本比本应用支持的更新，请升级应用后再试。</string>
+    <string name="qr_error_bad_field">二维码里某个字段过长。</string>
+    <string name="qr_error_bad_base64">二维码里的密文编码已损坏。</string>
+    <string name="qr_error_bad_params">二维码里的加密参数不合法，可能已被篡改。</string>
+    <string name="qr_error_bad_ciphertext">二维码里的密文长度不合法。</string>
+    <string name="qr_error_empty_credential">二维码里没有任何凭据字段。</string>
+
+    <!-- ==================== 二维码：显示为二维码 ==================== -->
+    <string name="entry_show_qr">显示为二维码</string>
+    <string name="qr_export_title">显示为二维码</string>
+    <string name="qr_export_body">用另一台设备上的 MyVault 扫描即可导入。二维码包含站点、用户名、密码、网址与备注。</string>
+    <string name="qr_export_mode_sealed">用口令加密（推荐）</string>
+    <string name="qr_export_mode_sealed_detail">对方扫描后要输入这个口令才能看到密码。适合打印或长期保存。</string>
+    <string name="qr_export_mode_plain">不加密（明文）</string>
+    <string name="qr_export_mode_plain_detail">任何能拍到屏幕的设备都能直接读到密码。只适合当面一次性传递。</string>
+    <string name="qr_export_passphrase">二维码口令</string>
+    <string name="qr_export_passphrase_hint">至少 %1$d 个字符；对方需要手动输入它。</string>
+    <string name="qr_export_passphrase_short">口令至少需要 %1$d 个字符</string>
+    <string name="qr_export_generate">生成二维码</string>
+    <string name="qr_export_too_big">内容太长，放不进二维码。请缩短备注后再试。</string>
+    <string name="qr_export_caption_sealed">对方扫描后需要输入口令才能解开。</string>
+    <string name="qr_export_caption_plain">这个二维码里是明文密码。</string>
+    <string name="qr_export_plain_warning_title">明文二维码</string>
+    <string name="qr_export_plain_warning_body">任何能拍到这块屏幕的相机都能读到密码。用完请立刻关闭。</string>
+    <string name="qr_export_again">重新生成</string>
+    <string name="cd_scan_qr">扫描二维码导入</string>
 
     <!-- ==================== 通用 ==================== -->
     <string name="common_ok">确定</string>

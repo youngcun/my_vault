@@ -431,6 +431,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun consumeMessage() = _state.update { it.copy(message = null, errorMessage = null) }
 
+    /**
+     * 从别的界面转交一条一次性提示（目前用于「扫码导入成功」）。
+     *
+     * 为什么不让扫码界面自己弹提示：导入成功后它立刻被弹出返回栈，
+     * 提示会随界面一起消失；列表页才是用户接下来看到的地方。
+     */
+    fun notify(message: String) = _state.update { it.copy(message = message, errorMessage = null) }
+
     // ------------------------------------------------------------ 密码生成
 
     /** 生成一个符合策略的密码；策略非法时返回 null 并给出提示。 */
